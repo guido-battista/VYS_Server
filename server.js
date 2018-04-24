@@ -8,10 +8,12 @@ const MongoClient = require('mongodb').MongoClient;
 
 var db;
 
+var port = process.env.PORT || 8080;
+
 MongoClient.connect('mongodb://vys_client:vys_client@ds255889.mlab.com:55889/vys_db', (err, client) => {
   if (err) return console.log(err)
   db = client.db('vys_db') // whatever your database name is
-  app.listen(3000, () => {
+  app.listen(port, () => {
     console.log('listening on 3000')
   })
 })
