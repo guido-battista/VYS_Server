@@ -12,8 +12,8 @@ const MongoClient = require('mongodb').MongoClient;
 
 var db;
 
-//var port = process.env.PORT || 8080;
-port = 3000;
+var port = process.env.PORT || 8080;
+//port = 3000;
 
 /*
 MongoClient.connect('mongodb://vys_client:vys_client@ds255889.mlab.com:55889/vys_db', (err, client) => {
