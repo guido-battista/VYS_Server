@@ -13,5 +13,15 @@
     <input type="text" placeholder="Nombre" name="Nombre">
     <button type="submit">Submit</button>
   </form>
+  <ul class="quotes">
+    <% for(var i=0; i<canciones.length; i++) {%>
+      <li class="cancion">
+        <form action="/canciones" method="GET">
+          <span><%= canciones[i].titulo %></span>
+          <button type="submit">Quitar  </button>
+        </form>
+      </li>
+    <% } %>
+</ul>
 </body>
 </html>

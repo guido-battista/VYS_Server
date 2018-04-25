@@ -6,4 +6,4 @@ var cancionSchema = new Schema({
   votos:     { type: Number }
 });
 
-module.exports = mongoose.model('Cancion', cancionSchema);
+module.exports = mongoose.model('canciones', cancionSchema);

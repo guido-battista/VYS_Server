@@ -30,14 +30,3 @@ app.post('/cancion', CancionCtrl.addCancion);
 app.get('/canciones', CancionCtrl.verCanciones);
 
 app.get('/',CancionCtrl.mostrarHome);
-
-/*
-app.post('/quotes', (req, res) => {
-  db.collection('quotes').save(req.body, (err, result) => {
-    if (err) return console.log(err)
-
-    console.log('saved to database')
-    res.redirect('/')
-  })
-})
-*/
