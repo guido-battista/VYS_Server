@@ -29,5 +29,5 @@ exports.verCanciones = (req, res) => {
 }
 
 exports.mostrarHome = (req, res) => {
-  res.sendFile(dirVistas + '/index.html')
+  res.render(dirVistas + '/index.ejs')
 };
