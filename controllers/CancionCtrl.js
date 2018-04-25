@@ -1,4 +1,8 @@
 const Cancion = require('../Model/Cancion.js');
+const Path = require('path');
+
+var dirVistas = Path.join(__dirname, '../View');
+console.log(dirVistas);
 
 //POST - Insert una nueva Cancion
 exports.addCancion = function(req, res) {
@@ -23,3 +27,7 @@ exports.verCanciones = (req, res) => {
   res.status(200).jsonp(canciones);
 });
 }
+
+exports.mostrarHome = (req, res) => {
+  res.sendFile(dirVistas + '/index.html')
+};
