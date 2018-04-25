@@ -12,7 +12,7 @@ const MongoClient = require('mongodb').MongoClient;
 
 var db;
 
-var port = process.env.PORT || 8080;
+var port = process.env.PORT || 3000;
 //port = 3000;
 
 /*
@@ -30,7 +30,7 @@ mongoose.connect('mongodb://vys_client:vys_client@ds255889.mlab.com:55889/vys_db
     console.log('ERROR: connecting to Database. ' + err);
   }
   app.listen(port, function() {
-    console.log("Node server running on http://localhost:3000");
+    console.log("Node server running on " + port);
   });
 });
 
