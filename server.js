@@ -3,6 +3,7 @@ const app = express();
 const bodyParser= require('body-parser');
 const mongoose = require('mongoose');
 const CancionCtrl = require('./controllers/CancionCtrl.js');
+const queryString = require('querystring');
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.set('view engine','ejs');
@@ -25,8 +26,18 @@ mongoose.connect('mongodb://vys_client:vys_client@ds255889.mlab.com:55889/vys_db
   });
 });
 
+app.get('/',CancionCtrl.mostrarHome);
+
 app.post('/cancion', CancionCtrl.addCancion);
 
 app.get('/canciones', CancionCtrl.verCanciones);
 
-app.get('/',CancionCtrl.mostrarHome);
+app.get('/quitar',CancionCtrl.quitarCancion);
+
+app.get('/sonando',CancionCtrl.cancionSonando);
+
+app.post('/sumarVoto',CancionCtrl.sumarVoto);
+
+app.post('/restarVoto',CancionCtrl.restarVoto);
+
+//app.get('/sonandoAhora',CancionCtrl.obtenerSonandoAhora);

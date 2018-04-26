@@ -9,19 +9,42 @@
   <form action="/canciones" method="GET">
     <button type="submit">Ver Canciones</button>
   </form>
+  <form action="/sumarVoto" method="POST">
+    <input type="text" placeholder="id" name="id">
+    <button type="submit">Sumar Voto</button>
+  </form>
+  <form action="/restarVoto" method="POST">
+    <input type="text" placeholder="id" name="id">
+    <button type="submit">Restar Voto</button>
+  </form>
   <form action="/cancion" method="POST">
     <input type="text" placeholder="Nombre" name="Nombre">
-    <button type="submit">Submit</button>
+    <button type="submit">Cargar</button>
   </form>
-  <ul class="quotes">
+  <table border="1">
+    <tr>
+    <th>Cancion</th>
+    <th>Votos</th>
+    <th> </th>
+    <th> </th>
+  </tr>
     <% for(var i=0; i<canciones.length; i++) {%>
-      <li class="cancion">
-        <form action="/canciones" method="GET">
-          <span><%= canciones[i].titulo %></span>
-          <button type="submit">Quitar  </button>
+    <tr>
+      <td><%= canciones[i].titulo %></td>
+      <td><%= canciones[i].votos %></td>
+      <td>
+        <form action="/sonando/:id=1" method="GET">
+          <button type="Sonando">Sonando</button>
         </form>
-      </li>
+      </td>
+      <td>
+        <form action="/quitar" method="GET">
+          <input style="display: none;" type="text" name="id" value=<%= canciones[i]._id %>>
+          <button type="submit">Quitar</button>
+        </form>
+      </td>
+    </tr>
     <% } %>
-</ul>
+  </table>
 </body>
 </html>
