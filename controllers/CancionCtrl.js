@@ -34,22 +34,22 @@ exports.addCancion = function(req, res) {
 
 exports.verCanciones = (req, res) => {
   Cancion.find(function(err, canciones) {
-  if(err) res.send(500, err.message);
-  console.log('GET /canciones')
-  res.status(200).jsonp(canciones);
+  	if(err) res.send(500, err.message);
+  	console.log('GET /canciones')
+  	res.status(200).jsonp(canciones);
 });
 };
 
 exports.mostrarHome = (req, res) => {
 	Cancion.find(function(err, result) {
-  if(err) res.send(500, err.message);
-	res.render(dirVistas + '/index.ejs',{canciones: result})
-});
+  	if(err) res.send(500, err.message);
+		var aVotar = result.filter((a)=>a.estado=="Votar");
+		var yaEscuchadas = result.filter((a)=>a.estado=="Escuchada");
+		res.render(dirVistas + '/index.ejs',{aVotar : aVotar, yaEscuchadas : yaEscuchadas});
+	});
 };
 
 exports.quitarCancion = (req, res) => {
-	console.log('Esta entrando por aca = ' + req.query.id.toString());
-	console.log('Id <'+req.query.id.toString()+'>');
 	Cancion.findByIdAndRemove({_id: req.query.id.toString()}, function(err) {
   	if(err) res.send(500, err.message);
 		res.redirect('..');
@@ -74,22 +74,10 @@ exports.restarVoto = (req, res) => {
 };
 
 //POST - Insert una nueva Cancion
-exports.cancionSonando = function(req, res) {
-	console.log('POST');
-	console.log(req.body);
-
-	var cancion = new Cancion({
-		idEvento: evento,
-		titulo:    req.body.Nombre,
-		votos: 	  0
-	});
-
-	cancion.save(function(err, cancion) {
-		if(err) return res.status(500).send( err.message);
-		Cancion.find(function(err, result) {
-		if(err) res.send(500, err.message);
-		res.redirect('..');
-		//res.render(dirVistas + '/index.ejs',{canciones: result})
-	});
-	});
+exports.elegirCancion = function(req, res) {
+	Cancion.findOneAndUpdate({_id :req.query.id}, {estado:"Escuchada"}, function(err, result) {
+	if(err) res.send(500, err.message);
+	res.redirect('..');
+	//res.render(dirVistas + '/index.ejs',{canciones: result})
+})
 };

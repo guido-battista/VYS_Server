@@ -6,7 +6,7 @@ var cancionSchema = new Schema({
   idEvento:  { type: String },
   titulo:    { type: String },
   votos:     { type: Number },
-  //Esto deberia ser un Enum
+  //'Votar', 'Escuchada','Baja'
   estado:    { type: String }
 });
 

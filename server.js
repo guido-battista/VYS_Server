@@ -34,7 +34,7 @@ app.get('/canciones', CancionCtrl.verCanciones);
 
 app.get('/quitar',CancionCtrl.quitarCancion);
 
-app.get('/sonando',CancionCtrl.cancionSonando);
+app.get('/elegir',CancionCtrl.elegirCancion);
 
 app.post('/sumarVoto',CancionCtrl.sumarVoto);
 

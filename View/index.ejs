@@ -5,7 +5,8 @@
   <title>MY APP</title>
 </head>
 <body>
-  Pagina para cargar canciones
+  Cargar una nueva cancion para votar
+  <!--
   <form action="/canciones" method="GET">
     <button type="submit">Ver Canciones</button>
   </form>
@@ -17,31 +18,51 @@
     <input type="text" placeholder="id" name="id">
     <button type="submit">Restar Voto</button>
   </form>
+  -->
   <form action="/cancion" method="POST">
     <input type="text" placeholder="Nombre" name="Nombre">
     <button type="submit">Cargar</button>
   </form>
+  Canciones para Votación
   <table border="1">
     <tr>
-    <th>Id</th>
     <th>Cancion</th>
     <th>Votos</th>
     <th> </th>
     <th> </th>
   </tr>
-    <% for(var i=0; i<canciones.length; i++) {%>
+    <% for(var i=0; i<aVotar.length; i++) {%>
     <tr>
-      <td><%= canciones[i]._id %></td>
-      <td><%= canciones[i].titulo %></td>
-      <td><%= canciones[i].votos %></td>
+      <td><%= aVotar[i].titulo %></td>
+      <td><%= aVotar[i].votos %></td>
       <td>
-        <form action="/sonando/:id=1" method="GET">
-          <button type="Sonando">Sonando</button>
+        <form action="/elegir" method="GET">
+          <input style="display: none;" type="text" name="id" value=<%= aVotar[i]._id %>>
+          <button type="submit">Elegir</button>
         </form>
       </td>
       <td>
         <form action="/quitar" method="GET">
-          <input style="display: none;" type="text" name="id" value=<%= canciones[i]._id %>>
+          <input style="display: none;" type="text" name="id" value=<%= aVotar[i]._id %>>
+          <button type="submit">Quitar</button>
+        </form>
+      </td>
+    </tr>
+    <% } %>
+  </table>
+  Canciones ya escuchadas
+  <table border="1">
+    <tr>
+    <th>Cancion</th>
+    <th>Votos</th>
+  </tr>
+    <% for(var i=0; i<yaEscuchadas.length; i++) {%>
+    <tr>
+      <td><%= yaEscuchadas[i].titulo %></td>
+      <td><%= yaEscuchadas[i].votos %></td>
+      <td>
+        <form action="/quitar" method="GET">
+          <input style="display: none;" type="text" name="id" value=<%= yaEscuchadas[i]._id %>>
           <button type="submit">Quitar</button>
         </form>
       </td>
