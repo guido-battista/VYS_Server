@@ -7,7 +7,7 @@ const queryString = require('querystring');
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.set('view engine','ejs');
-//app.use(bodyParser.json());
+app.use(bodyParser.json());
 //app.use(methodOverride());
 
 const MongoClient = require('mongodb').MongoClient;
