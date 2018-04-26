@@ -23,6 +23,7 @@
   </form>
   <table border="1">
     <tr>
+    <th>Id</th>
     <th>Cancion</th>
     <th>Votos</th>
     <th> </th>
@@ -30,6 +31,7 @@
   </tr>
     <% for(var i=0; i<canciones.length; i++) {%>
     <tr>
+      <td><%= canciones[i]._id %></td>
       <td><%= canciones[i].titulo %></td>
       <td><%= canciones[i].votos %></td>
       <td>
