@@ -9,9 +9,6 @@ var evento = 1;
 
 //POST - Insert una nueva Cancion
 exports.addCancion = function(req, res) {
-	console.log('POST');
-	console.log(req.body);
-
 	//var id =  mongoose.Types.ObjectId();
 	//console.log("ID <"+ id);
 	var cancion = new Cancion({
@@ -35,7 +32,6 @@ exports.addCancion = function(req, res) {
 exports.verCanciones = (req, res) => {
   Cancion.find(function(err, canciones) {
   	if(err) res.send(500, err.message);
-  	console.log('GET /canciones')
   	res.status(200).jsonp(canciones);
 });
 };
