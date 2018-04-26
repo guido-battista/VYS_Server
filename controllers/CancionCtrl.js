@@ -58,12 +58,6 @@ exports.quitarCancion = (req, res) => {
 };
 
 exports.sumarVoto = (req, res) => {
-	console.log("Body: "+req.body);
-	console.log("Se actualizara: "+ req.body._id);
-	console.log("Titulo: "+ req.body.titulo);
-	console.log("Titulo: "+ req.body);
-	console.log("Long: "+ req.body.length);
-	console.log("Algo: "+ req.body[0]);
 	Cancion.findOneAndUpdate({_id :req.body._id}, {$inc : {'votos' : 1}}, function(err, result) {
 	if(err) res.send(500, err.message);
 	res.status(200).jsonp(result);
