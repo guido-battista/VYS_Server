@@ -40,4 +40,6 @@ app.post('/sumarVoto',CancionCtrl.sumarVoto);
 
 app.post('/restarVoto',CancionCtrl.restarVoto);
 
+app.get('/sonando',CancionCtrl.cancionSonando);
+
 //app.get('/sonandoAhora',CancionCtrl.obtenerSonandoAhora);

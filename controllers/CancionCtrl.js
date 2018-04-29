@@ -37,7 +37,7 @@ exports.verCanciones = (req, res) => {
 };
 
 exports.mostrarHome = (req, res) => {
-	Cancion.find(function(err, result) {
+	Cancion.find({idEvento:evento},function(err, result) {
   	if(err) res.send(500, err.message);
 		var aVotar = result.filter((a)=>a.estado=="Votar");
 		var yaEscuchadas = result.filter((a)=>a.estado=="Escuchada");
@@ -80,4 +80,12 @@ exports.elegirCancion = function(req, res) {
 			//res.render(dirVistas + '/index.ejs',{canciones: result})
 		})
 	})
+};
+
+exports.cancionSonando = (req, res) => {
+	console.log("Evento:"+req.query.idEvento);
+	Cancion.findOne({idEvento:req.query.idEvento,estado:"Sonando"},function(err, canciones) {
+  	if(err) res.send(500, err.message);
+  	res.status(200).jsonp(canciones);
+	});
 };
