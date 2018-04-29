@@ -42,4 +42,6 @@ app.post('/restarVoto',CancionCtrl.restarVoto);
 
 app.get('/sonando',CancionCtrl.cancionSonando);
 
+app.post('/terminarCancionSonando',CancionCtrl.terminarCancionSonando);
+
 //app.get('/sonandoAhora',CancionCtrl.obtenerSonandoAhora);

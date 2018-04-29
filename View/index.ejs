@@ -5,11 +5,18 @@
   <title>MY APP</title>
 </head>
 <body>
+  <% for(var i=0; i<sonando.length; i++) {%>
   <table border="1">
     <tr>
-      <th>Canción Sonando: <%= sonando[0].titulo %></th>
+      <th>Canción Sonando: <%= sonando[i].titulo %></th>
+      <th>
+        <form action="/terminarCancionSonando" method="POST">
+          <button type="submit">Terminar</button>
+        </form>
+      </th>
     </tr>
   </table>
+  <% } %>
   Cargar una nueva cancion para votar
   <!--
   <form action="/canciones" method="GET">

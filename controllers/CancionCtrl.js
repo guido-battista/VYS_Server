@@ -83,9 +83,15 @@ exports.elegirCancion = function(req, res) {
 };
 
 exports.cancionSonando = (req, res) => {
-	console.log("Evento:"+req.query.idEvento);
 	Cancion.findOne({idEvento:req.query.idEvento,estado:"Sonando"},function(err, canciones) {
   	if(err) res.send(500, err.message);
   	res.status(200).jsonp(canciones);
 	});
+};
+
+exports.terminarCancionSonando = (req, res) => {
+		Cancion.findOneAndUpdate({idEvento:evento, estado:"Sonando"} , {estado:"Escuchada"}, function(err, result) {
+			if(err) res.send(500, err.message);
+			res.redirect('..');
+		});
 };
