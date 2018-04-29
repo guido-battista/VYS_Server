@@ -41,7 +41,8 @@ exports.mostrarHome = (req, res) => {
   	if(err) res.send(500, err.message);
 		var aVotar = result.filter((a)=>a.estado=="Votar");
 		var yaEscuchadas = result.filter((a)=>a.estado=="Escuchada");
-		res.render(dirVistas + '/index.ejs',{aVotar : aVotar, yaEscuchadas : yaEscuchadas});
+		var sonando = result.filter((a)=>a.estado=="Sonando");
+		res.render(dirVistas + '/index.ejs',{aVotar : aVotar, yaEscuchadas : yaEscuchadas, sonando:sonando});
 	});
 };
 
@@ -71,9 +72,12 @@ exports.restarVoto = (req, res) => {
 
 //POST - Insert una nueva Cancion
 exports.elegirCancion = function(req, res) {
-	Cancion.findOneAndUpdate({_id :req.query.id}, {estado:"Escuchada"}, function(err, result) {
-	if(err) res.send(500, err.message);
-	res.redirect('..');
-	//res.render(dirVistas + '/index.ejs',{canciones: result})
-})
+	Cancion.findOneAndUpdate({idEvento:evento, estado:"Sonando"} , {estado:"Escuchada"}, function(err, result) {
+		if(err) res.send(500, err.message);
+		Cancion.findOneAndUpdate({_id :req.query.id}, {estado:"Sonando"}, function(err, result) {
+			if(err) res.send(500, err.message);
+			res.redirect('..');
+			//res.render(dirVistas + '/index.ejs',{canciones: result})
+		})
+	})
 };
