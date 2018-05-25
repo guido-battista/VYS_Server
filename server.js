@@ -48,4 +48,9 @@ app.get('/evento',CancionCtrl.obtenerEvento);
 
 app.post('/cargarEvento',CancionCtrl.cargarEvento);
 
+app.get('/download', function(req, res){
+  var file = __dirname + '/Download/com.companyname.YouDJ.apk';
+  res.download(file); // Set disposition and send it.
+});
+
 //app.get('/sonandoAhora',CancionCtrl.obtenerSonandoAhora);
