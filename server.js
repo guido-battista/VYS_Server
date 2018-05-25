@@ -30,7 +30,7 @@ app.get('/',CancionCtrl.mostrarHome);
 
 app.post('/cancion', CancionCtrl.addCancion);
 
-app.get('/canciones', CancionCtrl.verCanciones);
+app.get('/canciones', CancionCtrl.obtenerCanciones);
 
 app.get('/quitar',CancionCtrl.quitarCancion);
 
@@ -43,5 +43,9 @@ app.post('/restarVoto',CancionCtrl.restarVoto);
 app.get('/sonando',CancionCtrl.cancionSonando);
 
 app.post('/terminarCancionSonando',CancionCtrl.terminarCancionSonando);
+
+app.get('/evento',CancionCtrl.obtenerEvento);
+
+app.post('/cargarEvento',CancionCtrl.cargarEvento);
 
 //app.get('/sonandoAhora',CancionCtrl.obtenerSonandoAhora);

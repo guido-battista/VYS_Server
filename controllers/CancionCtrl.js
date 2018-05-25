@@ -1,4 +1,5 @@
 const Cancion = require('../Model/Cancion.js');
+const Evento = require('../Model/Evento.js');
 const Path = require('path');
 const mongoose = require('mongoose');
 
@@ -29,8 +30,8 @@ exports.addCancion = function(req, res) {
 	});
 };
 
-exports.verCanciones = (req, res) => {
-  Cancion.find(function(err, canciones) {
+exports.obtenerCanciones = (req, res) => {
+  Cancion.find({idEvento:req.query.idEvento},function(err, canciones) {
   	if(err) res.send(500, err.message);
   	res.status(200).jsonp(canciones);
 });
@@ -94,4 +95,27 @@ exports.terminarCancionSonando = (req, res) => {
 			if(err) res.send(500, err.message);
 			res.redirect('..');
 		});
+};
+
+exports.obtenerEvento = (req, res) => {
+  Evento.findOne({id:req.query.idEvento},function(err, evento) {
+  	if(err) res.send(500, err.message);
+  	res.status(200).jsonp(evento);
+});
+};
+
+exports.cargarEvento = function(req, res) {
+	//var id =  mongoose.Types.ObjectId();
+	//console.log("ID <"+ id);
+	var evento = new Evento({
+		//_id: id,
+		id: 		"3",
+		codigo:	"1234",
+		estado:	"P"
+	});
+
+	evento.save(function(err, evento) {
+		if(err) return res.status(500).send( err.message);
+		res.redirect('..');
+	});
 };
