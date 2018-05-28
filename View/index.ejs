@@ -3,41 +3,41 @@
 <head>
   <meta charset="UTF-8">
   <title>MY APP</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 </head>
 <body>
-  <form action="/logout" method="POST">
-    <button type="submit">Logout</button>
-  </form>
-  <% for(var i=0; i<sonando.length; i++) {%>
-  <table border="1">
-    <tr>
-      <th>Canción Sonando: <%= sonando[i].titulo %></th>
-      <th>
-        <form action="/terminarCancionSonando" method="POST">
-          <button type="submit">Terminar</button>
-        </form>
-      </th>
-    </tr>
-  </table>
-  <% } %>
-  Cargar una nueva cancion para votar
-  <!--
-  <form action="/canciones" method="GET">
-    <button type="submit">Ver Canciones</button>
-  </form>
-  <form action="/sumarVoto" method="POST">
-    <input type="text" placeholder="id" name="id">
-    <button type="submit">Sumar Voto</button>
-  </form>
-  <form action="/restarVoto" method="POST">
-    <input type="text" placeholder="id" name="id">
-    <button type="submit">Restar Voto</button>
-  </form>
-  -->
-  <form action="/cancion" method="POST">
-    <input type="text" placeholder="Nombre" name="Nombre">
-    <button type="submit">Cargar</button>
-  </form>
+  <nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand">YouDJ - Consola</a>
+    </div>
+    <% for(var i=0; i<sonando.length; i++) {%>
+    <p class="navbar-text">Canción Sonando: <%= sonando[i].titulo %></p>
+    <form class="navbar-form navbar-left" action="/terminarCancionSonando" method="POST">
+      <button type="submit" class="btn btn-default">Terminar</button>
+    </form>
+      <% } %>
+    <form class="navbar-form navbar-right" action="/logout" method="POST">
+      <button type="submit" class="btn btn-default">Logout</button>
+    </form>
+  </div>
+  </nav>
+
+  <div class="container">
+    <h2>Ingrese una canción nueva</h2>
+    <form action="/cancion" method="POST">
+      <div class="row">
+          <div class="col-sm-6">
+             <input type="text" class="form-control" id="idEvento" placeholder="Nombre de la cancion" name="Nombre">
+          </div>
+          <div class="col-sm-1">
+            <button type="submit" class="btn btn-default">Cargar</button>
+          </div>
+      </div>
+    </form>
+  </div>
   Canciones para Votación
   <table border="1">
     <tr>

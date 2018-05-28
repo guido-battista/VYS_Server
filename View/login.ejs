@@ -3,15 +3,25 @@
 <head>
   <meta charset="UTF-8">
   <title>Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 </head>
   <body>
     <% if(error == "true"){ %>
             <%= mensaje %>
     <% } %>
-    <form action="/login" method="POST">
-      <input type="text" size="40" placeholder="Id de evento" name="idEvento"><br />
-      <input type="password" size="40" placeholder="Pass de evento" name="passEvento"><br />
-      <button type="submit">Login </button>
-    </form>
+    <div class="container">
+      <h2>Ingrese el Id de Evento y su Password</h2>
+      <form action="/login" method="POST">
+        <div class="form-group">
+          <input type="text" class="form-control" id="idEvento" placeholder="Ingrese Id del evento" name="idEvento">
+        </div>
+        <div class="form-group">
+          <input type="password" class="form-control" id="passEvento" placeholder="Ingrese Password del Evento" name="passEvento">
+        </div>
+        <button type="submit" class="btn btn-default">Login</button>
+      </form>
+    </div>
   </body>
 </html>
