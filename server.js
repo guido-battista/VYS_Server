@@ -5,6 +5,12 @@ const mongoose = require('mongoose');
 const CancionCtrl = require('./controllers/CancionCtrl.js');
 const queryString = require('querystring');
 
+//Seteo de sesion
+const session = require('express-session');
+app.use(session({ secret: 'secreto',
+                  resave: true,
+                  saveUninitialized: true}));
+
 app.use(bodyParser.urlencoded({extended: true}));
 app.set('view engine','ejs');
 app.use(bodyParser.json());
@@ -52,5 +58,11 @@ app.get('/download', function(req, res){
   var file = __dirname + '/Download/com.companyname.YouDJ.apk';
   res.download(file); // Set disposition and send it.
 });
+
+app.get('/login',CancionCtrl.login);
+
+app.post('/login',CancionCtrl.intentLogin);
+
+app.post('/logout',CancionCtrl.logout);
 
 //app.get('/sonandoAhora',CancionCtrl.obtenerSonandoAhora);

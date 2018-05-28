@@ -38,13 +38,20 @@ exports.obtenerCanciones = (req, res) => {
 };
 
 exports.mostrarHome = (req, res) => {
+	sesion = req.session;
+	if(sesion.idEvento) {
 	Cancion.find({idEvento:evento},function(err, result) {
   	if(err) res.send(500, err.message);
 		var aVotar = result.filter((a)=>a.estado=="Votar");
 		var yaEscuchadas = result.filter((a)=>a.estado=="Escuchada");
 		var sonando = result.filter((a)=>a.estado=="Sonando");
 		res.render(dirVistas + '/index.ejs',{aVotar : aVotar, yaEscuchadas : yaEscuchadas, sonando:sonando});
-	});
+	})}
+	else
+		{
+		//res.render(dirVistas + '/login.ejs',{error : "false", mensaje :"Pass incorrecto"});
+			res.redirect('/login');
+		}
 };
 
 exports.quitarCancion = (req, res) => {
@@ -118,4 +125,42 @@ exports.cargarEvento = function(req, res) {
 		if(err) return res.status(500).send( err.message);
 		res.redirect('..');
 	});
+};
+
+exports.login = (req, res) => {
+	res.render(dirVistas + '/login.ejs',{error : "false", mensaje :""});
+};
+
+exports.intentLogin = (req, res) => {
+	var mensaje = "";
+	var error= "false";
+	Evento.findOne({id:req.body.idEvento},function(err, evento) {
+  		if(err) res.send(500, err.message);
+			if (evento == null)
+			{
+				mensaje = "Evento inexistente";
+				error = "true";
+			}
+			else if(req.body.passEvento != evento.pass)
+			{
+				mensaje = "Pass incorecta";
+				error = "true";
+			}
+			if (error == "true")
+			{
+				res.render(dirVistas + '/login.ejs',{error : "true", mensaje :mensaje});
+			}
+			else
+			{
+				//Login correcto!!!!
+				sesion = req.session;
+				sesion.idEvento=req.body.idEvento;
+				res.redirect('/');
+			}
+	});
+};
+
+exports.logout = (req, res) => {
+  req.session.destroy();
+  res.redirect('/');
 };
