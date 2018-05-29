@@ -6,83 +6,127 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <style>
+  .navbar-inverse {
+    color: mediumseagreen;
+    background-color:mediumseagreen;
+    border-color: mediumseagreen;
+    background-image: none;
+    background-repeat: no-repeat;
+    }
+
+    .navbar-inverse .navbar-text {
+      color: white;
+      font-size: 17px;
+      vertical-align:middle;
+      }
+
+    .navbar-inverse .navbar-brand {
+      color: white;
+      }
+
+  </style>
 </head>
 <body>
-  <nav class="navbar navbar-default">
+  <nav class="navbar navbar-inverse">
   <div class="container-fluid">
     <div class="navbar-header">
       <a class="navbar-brand">YouDJ - Consola</a>
     </div>
+        <p class="navbar-brand"><span class="glyphicon glyphicon-option-vertical"></span></p>
     <% for(var i=0; i<sonando.length; i++) {%>
-    <p class="navbar-text">Canción Sonando: <%= sonando[i].titulo %></p>
-    <form class="navbar-form navbar-left" action="/terminarCancionSonando" method="POST">
-      <button type="submit" class="btn btn-default">Terminar</button>
-    </form>
+        <p class="navbar-brand"><span class="glyphicon glyphicon-volume-up"></span></p>
+        <p class="navbar-brand"><%= sonando[i].titulo %></p>
+        <form class="navbar-form navbar-left" action="/terminarCancionSonando" method="POST">
+          <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-stop"></span></button>
+        </form>
       <% } %>
     <form class="navbar-form navbar-right" action="/logout" method="POST">
-      <button type="submit" class="btn btn-default">Logout</button>
+      <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-log-out"></span> Log out</button>
     </form>
   </div>
   </nav>
 
   <div class="container">
-    <h2>Ingrese una canción nueva</h2>
+    <!--h2>Ingrese una canción nueva</h2-->
     <form action="/cancion" method="POST">
       <div class="row">
           <div class="col-sm-6">
-             <input type="text" class="form-control" id="idEvento" placeholder="Nombre de la cancion" name="Nombre">
+             <input type="text" class="form-control" id="idEvento" placeholder="Nueva canción para votar" name="Nombre">
           </div>
           <div class="col-sm-1">
-            <button type="submit" class="btn btn-default">Cargar</button>
+            <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span></button>
           </div>
       </div>
     </form>
   </div>
-  Canciones para Votación
-  <table border="1">
-    <tr>
-    <th>Cancion</th>
-    <th>Votos</th>
-    <th> </th>
-    <th> </th>
-  </tr>
-    <% for(var i=0; i<aVotar.length; i++) {%>
-    <tr>
-      <td><%= aVotar[i].titulo %></td>
-      <td><%= aVotar[i].votos %></td>
-      <td>
-        <form action="/elegir" method="GET">
-          <input style="display: none;" type="text" name="id" value=<%= aVotar[i]._id %>>
-          <button type="submit">Elegir</button>
-        </form>
-      </td>
-      <td>
-        <form action="/quitar" method="GET">
-          <input style="display: none;" type="text" name="id" value=<%= aVotar[i]._id %>>
-          <button type="submit">Quitar</button>
-        </form>
-      </td>
-    </tr>
-    <% } %>
-  </table>
-  Canciones ya escuchadas
-  <table border="1">
-    <tr>
-    <th>Cancion</th>
-    <th>Votos</th>
-  </tr>
-    <% for(var i=0; i<yaEscuchadas.length; i++) {%>
-    <tr>
-      <td><%= yaEscuchadas[i].titulo %></td>
-      <td><%= yaEscuchadas[i].votos %></td>
-      <td>
-        <form action="/quitar" method="GET">
-          <input style="display: none;" type="text" name="id" value=<%= yaEscuchadas[i]._id %>>
-          <button type="submit">Quitar</button>
-        </form>
-      </td>
-    </tr>
-    <% } %>
-  </table>
+
+  <br>
+  <hr class="style1">
+  <br>
+
+  <div class="container">
+      <!--h2><strong>Canciones disponibles para votación</strong></h2-->
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th class="text-center" style="width: 30%">Canciones para votar</th>
+            <th class="text-center" style="width: 20%">Votos</th>
+            <th class="text-center" style="width: 1%"></th>
+            <th class="text-center" style="width: 1%"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% for(var i=0; i<aVotar.length; i++) {%>
+            <tr>
+              <td class="text-center"><%= aVotar[i].titulo %></td>
+              <td class="text-center"><%= aVotar[i].votos %></td>
+              <td class="text-center">
+                <form action="/elegir" method="GET">
+                  <input style="display: none;" type="text" name="id" value=<%= aVotar[i]._id %>>
+                  <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-play"></span></button>
+                </form>
+              </td>
+              <td class="text-center">
+                <form action="/quitar" method="GET">
+                  <input style="display: none;" type="text" name="id" value=<%= aVotar[i]._id %>>
+                  <button type="submit" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
+                </form>
+              </td>
+            </tr>
+            <% } %>
+          </tbody>
+        </table>
+  </div>
+
+  <br>
+  <hr class="style1">
+  <br>
+
+  <div class="container">
+      <!--h2><strong>Canciones ya escuchadas</strong></h2-->
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th class="text-center" style="width: 30%">Canciones ya escuchadas</th>
+              <th class="text-center" style="width: 20%">Votos</th>
+              <th class="text-center" style="width: 1%"></th>
+            </tr>
+          </thead>
+        <% for(var i=0; i<yaEscuchadas.length; i++) {%>
+        <tr>
+          <td class="text-center"><%= yaEscuchadas[i].titulo %></td>
+          <td class="text-center"><%= yaEscuchadas[i].votos %></td>
+          <td class="text-center">
+            <form action="/quitar" method="GET">
+              <input style="display: none;" type="text" name="id" value=<%= yaEscuchadas[i]._id %>>
+              <button type="submit" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
+            </form>
+          </td>
+        </tr>
+        <% } %>
+      </table>
+  </div>
+
 </body>
 </html>

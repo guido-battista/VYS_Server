@@ -6,15 +6,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <style>
+  img {
+    display: block;
+    max-width: 50%;
+    height: auto;
+}
+  </style>
 </head>
   <body>
     <% if(error == "true"){ %>
             <%= mensaje %>
     <% } %>
-    <div class="container">
-      <h2>Ingrese el Id de Evento y su Password</h2>
+    <div class="col-xs-4 col-xs-offset-4">
+      <img src="/Logo.jpg" class="center-block">
+      <h3>Ingrese el Id de Evento y su Password</h3>
       <form action="/login" method="POST">
-        <div class="form-group">
+        <div class="form-group" >
           <input type="text" class="form-control" id="idEvento" placeholder="Ingrese Id del evento" name="idEvento">
         </div>
         <div class="form-group">

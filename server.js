@@ -22,6 +22,8 @@ var db;
 
 var port = process.env.PORT || 3000;
 
+app.use(express.static(__dirname + '/Images'));
+
 
 mongoose.connect('mongodb://vys_client:vys_client@ds255889.mlab.com:55889/vys_db', function(err, res) {
   if(err) {
