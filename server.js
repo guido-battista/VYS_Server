@@ -42,6 +42,10 @@ app.get('/canciones', CancionCtrl.obtenerCanciones);
 
 app.get('/quitar',CancionCtrl.quitarCancion);
 
+app.get('/quitarTodo',CancionCtrl.quitarTodo);
+
+app.get('/quitarTodoEscuchado',CancionCtrl.quitarTodoEscuchado);
+
 app.get('/elegir',CancionCtrl.elegirCancion);
 
 app.post('/sumarVoto',CancionCtrl.sumarVoto);
@@ -66,5 +70,15 @@ app.get('/login',CancionCtrl.login);
 app.post('/login',CancionCtrl.intentLogin);
 
 app.post('/logout',CancionCtrl.logout);
+
+app.post('/cargarArchivos',CancionCtrl.cargarArchivos);
+
+app.get('/ponerVotar',CancionCtrl.ponerVotar);
+
+app.get('/ponerVotarTodo',CancionCtrl.ponerVotarTodo);
+
+app.get('/quitarVotar',CancionCtrl.quitarVotar);
+
+app.get('/quitarVotarTodo',CancionCtrl.quitarVotarTodo);
 
 //app.get('/sonandoAhora',CancionCtrl.obtenerSonandoAhora);

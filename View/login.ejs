@@ -15,21 +15,21 @@
   </style>
 </head>
   <body>
-    <% if(error == "true"){ %>
-            <%= mensaje %>
-    <% } %>
     <div class="col-xs-4 col-xs-offset-4">
       <img src="/Logo.jpg" class="center-block">
-      <h3>Ingrese el Id de Evento y su Password</h3>
+      <h3>Ingrese el Id de Evento y su Contraseña</h3>
       <form action="/login" method="POST">
         <div class="form-group" >
           <input type="text" class="form-control" id="idEvento" placeholder="Ingrese Id del evento" name="idEvento">
         </div>
         <div class="form-group">
-          <input type="password" class="form-control" id="passEvento" placeholder="Ingrese Password del Evento" name="passEvento">
+          <input type="password" class="form-control" id="passEvento" placeholder="Ingrese Contraseña del Evento" name="passEvento">
         </div>
         <button type="submit" class="btn btn-default">Login</button>
       </form>
+      <% if(error == "true"){ %>
+        <h4 class="text-danger"><%= mensaje %></h$>
+      <% } %>
     </div>
   </body>
 </html>

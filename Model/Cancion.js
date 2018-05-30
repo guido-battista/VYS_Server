@@ -6,7 +6,7 @@ var cancionSchema = new Schema({
   idEvento:  { type: String },
   titulo:    { type: String },
   votos:     { type: Number },
-  //'Votar', 'Escuchada','Baja'
+  //'Votar','Pendiente' 'Escuchada','Baja'
   estado:    { type: String }
 });
 

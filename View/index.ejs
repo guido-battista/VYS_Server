@@ -24,7 +24,6 @@
     .navbar-inverse .navbar-brand {
       color: white;
       }
-
   </style>
 </head>
 <body>
@@ -49,17 +48,28 @@
 
   <div class="container">
     <!--h2>Ingrese una canción nueva</h2-->
-    <form action="/cancion" method="POST">
+
       <div class="row">
+        <form action="/cancion" method="POST">
           <div class="col-sm-6">
              <input type="text" class="form-control" id="idEvento" placeholder="Nueva canción para votar" name="Nombre">
           </div>
           <div class="col-sm-1">
             <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span></button>
           </div>
+          </form>
       </div>
-    </form>
-  </div>
+      <div class="row">
+        <form action="/cargarArchivos" method="POST">
+          <div class="col-sm-6">
+            <input type="file" name="files[]" multiple />
+          </div>
+          <div class="col-sm-1">
+              <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-arrow-up"></span></button>
+            </div>
+      </form>
+      </div>
+    </div>
 
   <br>
   <hr class="style1">
@@ -72,8 +82,28 @@
           <tr>
             <th class="text-center" style="width: 30%">Canciones para votar</th>
             <th class="text-center" style="width: 20%">Votos</th>
-            <th class="text-center" style="width: 1%"></th>
-            <th class="text-center" style="width: 1%"></th>
+              <th class="text-center" style="width: 1%"></th>
+            <% if (aVotar.length > 0) { %>
+            <th class="text-center" style="width: 1%">
+              <form action="/ponerVotarTodo" method="GET">
+                <input style="display: none;" type="text" name="id">
+                <button type="submit" class="btn btn-warning"><span class="glyphicon glyphicon-triangle-top"></span></button>
+              </form>
+              <form action="/quitarVotarTodo" method="GET">
+                <input style="display: none;" type="text" name="id">
+                <button type="submit" class="btn btn-warning"><span class="glyphicon glyphicon-triangle-bottom"></span></button>
+              </form>
+            </th>
+            <th class="text-center" style="width: 1%">
+              <form action="/quitarTodo" method="GET">
+                <input style="display: none;" type="text" name="id">
+                <button type="submit" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
+              </form>
+            </th>
+            <% } else { %>
+              <th class="text-center" style="width: 1%"></th>
+              <th class="text-center" style="width: 1%"></th>
+            <% }%>
           </tr>
         </thead>
         <tbody>
@@ -82,10 +112,25 @@
               <td class="text-center"><%= aVotar[i].titulo %></td>
               <td class="text-center"><%= aVotar[i].votos %></td>
               <td class="text-center">
+                <% if (aVotar[i].estado == "Votar") { %>
                 <form action="/elegir" method="GET">
                   <input style="display: none;" type="text" name="id" value=<%= aVotar[i]._id %>>
                   <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-play"></span></button>
                 </form>
+                <% } %>
+              </td>
+              <td class="text-center">
+                <% if (aVotar[i].estado == "Pendiente") { %>
+                <form action="/ponerVotar" method="GET">
+                <input style="display: none;" type="text" name="id" value=<%= aVotar[i]._id %>>
+                <button type="submit" class="btn btn-warning"><span class="glyphicon glyphicon-triangle-top"></span></button>
+                </form>
+                <% } else { %>
+                <form action="/quitarVotar" method="GET">
+                <input style="display: none;" type="text" name="id" value=<%= aVotar[i]._id %>>
+                <button type="submit" class="btn btn-warning"><span class="glyphicon glyphicon-triangle-bottom"></span></button>
+                </form>
+                <% } %>
               </td>
               <td class="text-center">
                 <form action="/quitar" method="GET">
@@ -110,7 +155,14 @@
             <tr>
               <th class="text-center" style="width: 30%">Canciones ya escuchadas</th>
               <th class="text-center" style="width: 20%">Votos</th>
-              <th class="text-center" style="width: 1%"></th>
+              <th class="text-center" style="width: 1%">
+                <% if (yaEscuchadas.length > 0) { %>
+                <form action="/quitarTodoEscuchado" method="GET">
+                  <input style="display: none;" type="text" name="id">
+                  <button type="submit" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
+                </form>
+                <% } %>
+              </th>
             </tr>
           </thead>
         <% for(var i=0; i<yaEscuchadas.length; i++) {%>

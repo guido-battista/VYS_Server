@@ -7,17 +7,20 @@ var dirVistas = Path.join(__dirname, '../View');
 
 // Aca tengo que obtener o definir el evento
 var evento = 1;
+var session;
 
 //POST - Insert una nueva Cancion
 exports.addCancion = function(req, res) {
 	//var id =  mongoose.Types.ObjectId();
 	//console.log("ID <"+ id);
+	sesion = req.session;
+	evento = sesion.idEvento;
 	var cancion = new Cancion({
 		//_id: id,
 		idEvento: evento,
 		titulo:    req.body.Nombre,
 		votos: 	  0,
-		estado:		'Votar'
+		estado:		'Pendiente'
 	});
 
 	cancion.save(function(err, cancion) {
@@ -42,7 +45,7 @@ exports.mostrarHome = (req, res) => {
 	if(sesion.idEvento) {
 	Cancion.find({idEvento:evento},function(err, result) {
   	if(err) res.send(500, err.message);
-		var aVotar = result.filter((a)=>a.estado=="Votar");
+		var aVotar = result.filter(function(a){return a.estado=="Votar" || a.estado=="Pendiente"});
 		var yaEscuchadas = result.filter((a)=>a.estado=="Escuchada");
 		var sonando = result.filter((a)=>a.estado=="Sonando");
 		res.render(dirVistas + '/index.ejs',{aVotar : aVotar, yaEscuchadas : yaEscuchadas, sonando:sonando});
@@ -56,6 +59,16 @@ exports.mostrarHome = (req, res) => {
 
 exports.quitarCancion = (req, res) => {
 	Cancion.findByIdAndRemove({_id: req.query.id.toString()}, function(err) {
+  	if(err) res.send(500, err.message);
+		res.redirect('..');
+		//res.status(200).jsonp(canciones);
+	});
+};
+
+exports.quitarTodo = (req, res) => {
+	sesion = req.session;
+	evento = sesion.idEvento;
+	Cancion.remove({idEvento:evento,"$or":[{estado:"Pendiente"},{estado:"Votar"}]}, function(err) {
   	if(err) res.send(500, err.message);
 		res.redirect('..');
 		//res.status(200).jsonp(canciones);
@@ -143,7 +156,7 @@ exports.intentLogin = (req, res) => {
 			}
 			else if(req.body.passEvento != evento.pass)
 			{
-				mensaje = "Pass incorecta";
+				mensaje = "Contraseña incorrecta";
 				error = "true";
 			}
 			if (error == "true")
@@ -163,4 +176,100 @@ exports.intentLogin = (req, res) => {
 exports.logout = (req, res) => {
   req.session.destroy();
   res.redirect('/');
+};
+
+exports.cargarArchivos = (req, res) => {
+	//sesion = req.session;
+	//evento = session.idEvento;
+	//console.log("Archivos < "+req.body.files.toString());
+
+	var archivos = req.body.files.toString().split(",");
+	archivos = archivos.filter(function(a){return a.includes(".mp3") || a.includes(".mp4")});
+
+	guardarCanciones(archivos,req,res);
+	//while(cancion != null)
+	//{
+	//	console.log("Cancion = "+cancion);
+	//		cancion = canciones.pop();
+	//}
+};
+
+function guardarCanciones (archivos,req,res)
+{
+	var archivo = archivos.pop();
+
+	if(archivo!=null)
+	{
+		archivo = archivo.replace(".mp3", "");
+		archivo = archivo.replace(".mp4", "");
+		sesion = req.session;
+		evento = sesion.idEvento;
+		var cancion = new Cancion({
+			//_id: id,
+			idEvento: evento,
+			titulo:    archivo,
+			votos: 	  0,
+			estado:		'Pendiente'
+		});
+
+		cancion.save(function(err, cancion) {
+			if(err) return res.status(500).send( err.message);
+			Cancion.find(function(err, result) {
+			if(err) res.send(500, err.message);
+			guardarCanciones(archivos,req,res);
+			//res.render(dirVistas + '/index.ejs',{canciones: result})
+			});
+		});
+	}
+	else
+	{
+			res.redirect('/');
+	}
+};
+
+
+exports.ponerVotar = function(req, res) {
+		Cancion.findOneAndUpdate({_id :req.query.id}, {estado:"Votar"}, function(err, result) {
+			if(err) res.send(500, err.message);
+			res.redirect('..');
+			//res.render(dirVistas + '/index.ejs',{canciones: result})
+		})
+};
+
+exports.ponerVotarTodo = function(req, res) {
+		sesion = req.session;
+		evento = sesion.idEvento;
+		Cancion.updateMany({idEvento:evento,estado:"Pendiente"}, {estado:"Votar"}, function(err, result) {
+			if(err) res.send(500, err.message);
+			res.redirect('..');
+			//res.render(dirVistas + '/index.ejs',{canciones: result})
+		})
+};
+
+exports.quitarVotar = function(req, res) {
+		Cancion.findOneAndUpdate({_id :req.query.id}, {estado:"Pendiente"}, function(err, result) {
+			if(err) res.send(500, err.message);
+			res.redirect('..');
+			//res.render(dirVistas + '/index.ejs',{canciones: result})
+		})
+};
+
+exports.quitarVotarTodo = function(req, res) {
+		sesion = req.session;
+		evento = sesion.idEvento;
+		Cancion.updateMany({idEvento:evento,estado:"Votar"}, {estado:"Pendiente"}, function(err, result) {
+			if(err) res.send(500, err.message);
+			res.redirect('..');
+			//res.render(dirVistas + '/index.ejs',{canciones: result})
+		})
+};
+
+exports.quitarTodoEscuchado = (req, res) => {
+	sesion = req.session;
+	evento = sesion.idEvento;;
+	Cancion.remove({idEvento:evento,estado:"Escuchada"}, function(err) {
+  	if(err) res.send(500, err.message);
+		res.redirect('..');
+		//res.status(200).jsonp(canciones);
+	});
 };
