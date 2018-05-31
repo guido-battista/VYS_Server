@@ -5,9 +5,11 @@ var eventoSchema = new Schema({
       //_id:       { type: String},
       id:         { type: String },
       codigo:     { type: String },
+      estado:     { type: String },
       pass:       { type: String },
+      intervalo:  { type: Number}
       //'Votar', 'P':Pendiente, 'A':Activo,'H':Historico
-      estado:     { type: String }
+
 });
 
 module.exports = mongoose.model('evento', eventoSchema);

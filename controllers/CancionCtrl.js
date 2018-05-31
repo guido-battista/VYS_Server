@@ -43,7 +43,7 @@ exports.obtenerCanciones = (req, res) => {
 exports.mostrarHome = (req, res) => {
 	sesion = req.session;
 	if(sesion.idEvento) {
-	Cancion.find({idEvento:evento},function(err, result) {
+	Cancion.find({idEvento:evento}).sort({votos:"desc"}).exec(function(err, result) {
   	if(err) res.send(500, err.message);
 		var aVotar = result.filter(function(a){return a.estado=="Votar" || a.estado=="Pendiente"});
 		var yaEscuchadas = result.filter((a)=>a.estado=="Escuchada");
@@ -76,7 +76,7 @@ exports.quitarTodo = (req, res) => {
 };
 
 exports.sumarVoto = (req, res) => {
-	Cancion.findOneAndUpdate({_id :req.body._id}, {$inc : {'votos' : 1}}, function(err, result) {
+	Cancion.findOneAndUpdate({_id :req.body._id,estado:"Votar"}, {$inc : {'votos' : 1}}, function(err, result) {
 	if(err) res.send(500, err.message);
 	res.status(200).jsonp(result);
 	//res.render(dirVistas + '/index.ejs',{canciones: result})
@@ -247,7 +247,7 @@ exports.ponerVotarTodo = function(req, res) {
 };
 
 exports.quitarVotar = function(req, res) {
-		Cancion.findOneAndUpdate({_id :req.query.id}, {estado:"Pendiente"}, function(err, result) {
+		Cancion.findOneAndUpdate({_id :req.query.id}, {estado:"Pendiente",votos:0}, function(err, result) {
 			if(err) res.send(500, err.message);
 			res.redirect('..');
 			//res.render(dirVistas + '/index.ejs',{canciones: result})
@@ -257,7 +257,7 @@ exports.quitarVotar = function(req, res) {
 exports.quitarVotarTodo = function(req, res) {
 		sesion = req.session;
 		evento = sesion.idEvento;
-		Cancion.updateMany({idEvento:evento,estado:"Votar"}, {estado:"Pendiente"}, function(err, result) {
+		Cancion.updateMany({idEvento:evento,estado:"Votar"}, {estado:"Pendiente",votos:0}, function(err, result) {
 			if(err) res.send(500, err.message);
 			res.redirect('..');
 			//res.render(dirVistas + '/index.ejs',{canciones: result})
