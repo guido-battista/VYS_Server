@@ -34,7 +34,7 @@ exports.addCancion = function(req, res) {
 };
 
 exports.obtenerCanciones = (req, res) => {
-  Cancion.find({idEvento:req.query.idEvento},function(err, canciones) {
+  Cancion.find({idEvento:req.query.idEvento}).sort({votos:"desc"}).exec(function(err, canciones) {
   	if(err) res.send(500, err.message);
   	res.status(200).jsonp(canciones);
 });
