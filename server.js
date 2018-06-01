@@ -61,7 +61,7 @@ app.get('/evento',CancionCtrl.obtenerEvento);
 app.post('/cargarEvento',CancionCtrl.cargarEvento);
 
 app.get('/download', function(req, res){
-  var file = __dirname + '/Download/com.companyname.YouDJ.apk';
+  var file = __dirname + '/Download/com.companyname.YouDJ.v0.0.apk';
   res.download(file); // Set disposition and send it.
 });
 

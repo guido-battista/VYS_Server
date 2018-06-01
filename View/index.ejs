@@ -25,6 +25,12 @@
       color: white;
       }
   </style>
+  <script>
+  $(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();
+  });
+</script>
+  </script>
 </head>
 <body>
   <nav class="navbar navbar-inverse">
@@ -51,12 +57,12 @@
 
       <div class="row">
         <form action="/cancion" method="POST">
-          <div class="col-sm-6">
+          <p class="col-sm-6">
              <input type="text" class="form-control" id="idEvento" placeholder="Nueva canción para votar" name="Nombre">
-          </div>
-          <div class="col-sm-1">
+          </p>
+          <p class="col-sm-1">
             <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span></button>
-          </div>
+          </p>
           </form>
       </div>
       <div class="row">
@@ -85,19 +91,19 @@
               <th class="text-center" style="width: 1%"></th>
             <% if (aVotar.length > 0) { %>
             <th class="text-center" style="width: 1%">
-              <form action="/ponerVotarTodo" method="GET">
+              <form action="/ponerVotarTodo" method="GET" >
                 <input style="display: none;" type="text" name="id">
-                <button type="submit" class="btn btn-warning"><span class="glyphicon glyphicon-triangle-top"></span></button>
+                <button type="submit" class="btn btn-warning" data-toggle="tooltip" data-placement="top" title="Poner todas en votación"><span class="glyphicon glyphicon-triangle-top"></span></button>
               </form>
-              <form action="/quitarVotarTodo" method="GET">
+              <form action="/quitarVotarTodo" method="GET" >
                 <input style="display: none;" type="text" name="id">
-                <button type="submit" class="btn btn-warning"><span class="glyphicon glyphicon-triangle-bottom"></span></button>
+                <button type="submit" class="btn btn-warning" data-toggle="tooltip" data-placement="top" title="Quitar todas de votación"><span class="glyphicon glyphicon-triangle-bottom"></span></button>
               </form>
             </th>
             <th class="text-center" style="width: 1%">
               <form action="/quitarTodo" method="GET">
                 <input style="display: none;" type="text" name="id">
-                <button type="submit" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
+                <button type="submit" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Borrar todas"><span class="glyphicon glyphicon-remove"></span></button>
               </form>
             </th>
             <% } else { %>
@@ -115,7 +121,7 @@
                 <% if (aVotar[i].estado == "Votar") { %>
                 <form action="/elegir" method="GET">
                   <input style="display: none;" type="text" name="id" value=<%= aVotar[i]._id %>>
-                  <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-play"></span></button>
+                  <button type="submit" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Elegir"><span class="glyphicon glyphicon-play"></span></button>
                 </form>
                 <% } %>
               </td>
@@ -123,19 +129,19 @@
                 <% if (aVotar[i].estado == "Pendiente") { %>
                 <form action="/ponerVotar" method="GET">
                 <input style="display: none;" type="text" name="id" value=<%= aVotar[i]._id %>>
-                <button type="submit" class="btn btn-warning"><span class="glyphicon glyphicon-triangle-top"></span></button>
+                <button type="submit" class="btn btn-warning" data-toggle="tooltip" data-placement="top" title="Poner en votación"><span class="glyphicon glyphicon-triangle-top"></span></button>
                 </form>
                 <% } else { %>
                 <form action="/quitarVotar" method="GET">
                 <input style="display: none;" type="text" name="id" value=<%= aVotar[i]._id %>>
-                <button type="submit" class="btn btn-warning"><span class="glyphicon glyphicon-triangle-bottom"></span></button>
+                <button type="submit" class="btn btn-warning" data-toggle="tooltip" data-placement="top" title="Quitar de votación"><span class="glyphicon glyphicon-triangle-bottom"></span></button>
                 </form>
                 <% } %>
               </td>
               <td class="text-center">
                 <form action="/quitar" method="GET">
                   <input style="display: none;" type="text" name="id" value=<%= aVotar[i]._id %>>
-                  <button type="submit" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
+                  <button type="submit" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Borrar"><span class="glyphicon glyphicon-remove"></span></button>
                 </form>
               </td>
             </tr>
@@ -159,7 +165,7 @@
                 <% if (yaEscuchadas.length > 0) { %>
                 <form action="/quitarTodoEscuchado" method="GET">
                   <input style="display: none;" type="text" name="id">
-                  <button type="submit" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
+                  <button type="submit" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Borrar todas"><span class="glyphicon glyphicon-remove"></span></button>
                 </form>
                 <% } %>
               </th>
@@ -172,7 +178,7 @@
           <td class="text-center">
             <form action="/quitar" method="GET">
               <input style="display: none;" type="text" name="id" value=<%= yaEscuchadas[i]._id %>>
-              <button type="submit" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
+              <button type="submit" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Borrar"><span class="glyphicon glyphicon-remove"></span></button>
             </form>
           </td>
         </tr>
