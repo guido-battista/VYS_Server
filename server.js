@@ -65,6 +65,11 @@ app.get('/download', function(req, res){
   res.download(file); // Set disposition and send it.
 });
 
+app.get('/download2', function(req, res){
+  var file = __dirname + '/Download/com.companyname.YouDJ.v0.1.apk';
+  res.download(file); // Set disposition and send it.
+});
+
 app.get('/login',CancionCtrl.login);
 
 app.post('/login',CancionCtrl.intentLogin);
