@@ -34,7 +34,9 @@ exports.addCancion = function(req, res) {
 };
 
 exports.obtenerCanciones = (req, res) => {
-  Cancion.find({idEvento:req.query.idEvento}).sort({votos:"desc"}).exec(function(err, canciones) {
+	sesion = req.session;
+	evento = sesion.idEvento;
+  Cancion.find({idEvento:req.query.idEvento}).sort({votos:"desc",titulo:"asc"}).exec(function(err, canciones) {
   	if(err) res.send(500, err.message);
   	res.status(200).jsonp(canciones);
 });
@@ -43,7 +45,8 @@ exports.obtenerCanciones = (req, res) => {
 exports.mostrarHome = (req, res) => {
 	sesion = req.session;
 	if(sesion.idEvento) {
-	Cancion.find({idEvento:evento}).sort({votos:"desc"}).exec(function(err, result) {
+		evento = sesion.idEvento;
+	Cancion.find({idEvento:evento}).sort({votos:"desc",titulo:"asc"}).exec(function(err, result) {
   	if(err) res.send(500, err.message);
 		var aVotar = result.filter(function(a){return a.estado=="Votar" || a.estado=="Pendiente"});
 		var yaEscuchadas = result.filter((a)=>a.estado=="Escuchada");
@@ -93,6 +96,8 @@ exports.restarVoto = (req, res) => {
 
 //POST - Insert una nueva Cancion
 exports.elegirCancion = function(req, res) {
+	sesion = req.session;
+	evento = sesion.idEvento;
 	Cancion.findOneAndUpdate({idEvento:evento, estado:"Sonando"} , {estado:"Escuchada"}, function(err, result) {
 		if(err) res.send(500, err.message);
 		Cancion.findOneAndUpdate({_id :req.query.id}, {estado:"Sonando"}, function(err, result) {
