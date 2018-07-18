@@ -72,13 +72,19 @@ exports.mostrarHome = (req, res) => {
 	sesion = req.session;
 	if(sesion.idEvento) {
 		evento = sesion.idEvento;
-	Cancion.find({idEvento:evento}).sort({estado:"desc",votos:"desc",titulo:"asc"}).exec(function(err, result) {
-  	if(err) res.send(500, err.message);
-		var aVotar = result.filter(function(a){return a.estado=="Votar" || a.estado=="Pendiente"});
-		var yaEscuchadas = result.filter((a)=>a.estado=="Escuchada");
-		var sonando = result.filter((a)=>a.estado=="Sonando");
-		res.render(dirVistas + '/index.ejs',{aVotar : aVotar, yaEscuchadas : yaEscuchadas, sonando:sonando});
-	})}
+		Cancion.find({idEvento:evento}).sort({estado:"desc",votos:"desc",titulo:"asc"}).exec(function(err, result) {
+  		if(err) res.send(500, err.message);
+				Evento.findOne({id:evento},function(err, evento){
+					if(err) res.send(500, err.message);
+					var aVotar = result.filter(function(a){return a.estado=="Votar" || a.estado=="Pendiente"});
+					var yaEscuchadas = result.filter((a)=>a.estado=="Escuchada");
+					var sonando = result.filter((a)=>a.estado=="Sonando");
+					var enPausa = evento.enPausa;
+					//console.log("En pausa:" + enPausa);
+					res.render(dirVistas + '/index.ejs',{aVotar : aVotar, yaEscuchadas : yaEscuchadas, sonando:sonando, enPausa:enPausa});
+				})
+		})
+	}
 	else
 		{
 		//res.render(dirVistas + '/login.ejs',{error : "false", mensaje :"Pass incorrecto"});
@@ -364,10 +370,28 @@ exports.quitarTodoEscuchado = (req, res) => {
 exports.prueba = (req, res) => {
   Cancion.find({idEvento:2}).sort({estado:"desc",votos:"desc",titulo:"asc"}).exec(function(err, canciones) {
   	if(err) res.send(500, err.message);
-		console.log("Canciones :"+canciones);
-
 		//var retorno = "{estado:'00'}";
   	res.status(200).jsonp(agregarRespuesta("00",canciones));
 		//res.status(200).jsonp(canciones);
 });
+};
+
+exports.pausar = (req, res) => {
+	sesion = req.session;
+	evento = sesion.idEvento;
+	Evento.findOneAndUpdate({id:evento}, {enPausa:"1"}, function(err, result) {
+		if(err) res.send(500, err.message);
+		res.redirect('..');
+		//res.render(dirVistas + '/index.ejs',{canciones: result})
+	})
+};
+
+exports.reaundar = (req, res) => {
+	sesion = req.session;
+	evento = sesion.idEvento;
+	Evento.findOneAndUpdate({id:evento}, {enPausa:"0"}, function(err, result) {
+		if(err) res.send(500, err.message);
+		res.redirect('..');
+		//res.render(dirVistas + '/index.ejs',{canciones: result})
+	})
 };
