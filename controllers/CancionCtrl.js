@@ -5,6 +5,32 @@ const mongoose = require('mongoose');
 
 var dirVistas = Path.join(__dirname, '../View');
 
+function agregarRespuesta(codigo,json){
+
+		var a;
+		if (Array.isArray(json))
+		{
+			a = "{estado:'"+codigo+"', respuesta:["+json+"]}";
+		}
+		else {
+				a = "{estado:"+codigo+", respuesta"+json+"}";
+		}
+
+		console.log("Antes del JSON");
+		var b = JSON.parse('{"agregado": "00"}');
+
+		console.log("Antes del Object");
+		var c = Object.assign(json,b);
+
+		console.log(c);
+
+		return c;
+
+		//return JSON.parse(a);
+		//return JSON.parse('{ "name":"John", "age":30, "city":"New York"}');
+
+}
+
 // Aca tengo que obtener o definir el evento
 var evento = 1;
 var session;
@@ -79,11 +105,36 @@ exports.quitarTodo = (req, res) => {
 };
 
 exports.sumarVoto = (req, res) => {
-	Cancion.findOneAndUpdate({_id :req.body._id,estado:"Votar"}, {$inc : {'votos' : 1}}, function(err, result) {
-	if(err) res.send(500, err.message);
-	res.status(200).jsonp(result);
-	//res.render(dirVistas + '/index.ejs',{canciones: result})
-})
+	var resultado = {};
+	Evento.findOne({id:req.body.idEvento},function(err, evento)
+	{
+  	if(err) res.send(500, err.message);
+		if (evento.enPausa == '0')
+		{
+				Cancion.findOneAndUpdate({_id :req.body._id,estado:"Votar"}, {$inc : {'votos' : 1}}, function(err, result) {
+				if(err) res.send(500, err.message);
+				if (result != null)
+				{
+					resultado['codigoRetorno'] = '00';
+					resultado['descripcionRetorno'] = 'Voto Contabilizado';
+				}
+				else
+				{
+					resultado['codigoRetorno'] = '01';
+					resultado['descripcionRetorno'] = 'El tema ya no esta disponible para votar';
+				}
+				//res.status(200).jsonp(result);
+				res.status(200).jsonp(resultado);
+				//res.render(dirVistas + '/index.ejs',{canciones: result})
+			})
+		}
+		else
+		{
+			resultado['codigoRetorno'] = '02';
+			resultado['descripcionRetorno'] = 'El DJ pausó la votación';
+			res.status(200).jsonp(resultado);
+		}
+	})
 };
 
 exports.restarVoto = (req, res) => {
@@ -109,10 +160,41 @@ exports.elegirCancion = function(req, res) {
 };
 
 exports.cancionSonando = (req, res) => {
-	Cancion.findOne({idEvento:req.query.idEvento,estado:"Sonando"},function(err, canciones) {
-  	if(err) res.send(500, err.message);
-  	res.status(200).jsonp(canciones);
-	});
+	resultado = {};
+	Evento.findOne({id:req.query.idEvento},function(err, evento)
+	{
+		if(err) res.send(500, err.message);
+		if (evento.enPausa == "1")
+		{
+			resultado["codigoRetorno"] = '01';
+			resultado["descripcionRetorno"] = "El DJ pausó la votación";
+			//console.log("Devuelvo resultado");
+			res.status(200).jsonp(resultado);
+		}
+		else
+		{
+		Cancion.findOne({idEvento:req.query.idEvento,estado:"Sonando"},function(err, canciones) {
+  		if(err) res.send(500, err.message);
+			if(canciones != null)
+			{
+				resultado["codigoRetorno"] = '00';
+				resultado["descripcionRetorno"] = "";
+				resultado["cancionSonando"] = canciones.titulo;
+				//console.log("Devuelvo resultado");
+				res.status(200).jsonp(resultado);
+			}
+			else
+			{
+				resultado["codigoRetorno"] = '02';
+				resultado["descripcionRetorno"] = "El DJ no cargó la canción sonando";
+				resultado["cancionSonando"] = "";
+				//console.log("Devuelvo resultado");
+				res.status(200).jsonp(resultado);
+			}
+  		//res.status(200).jsonp(resultado);
+		});
+		}
+	})
 };
 
 exports.terminarCancionSonando = (req, res) => {
@@ -277,4 +359,15 @@ exports.quitarTodoEscuchado = (req, res) => {
 		res.redirect('..');
 		//res.status(200).jsonp(canciones);
 	});
+};
+
+exports.prueba = (req, res) => {
+  Cancion.find({idEvento:2}).sort({estado:"desc",votos:"desc",titulo:"asc"}).exec(function(err, canciones) {
+  	if(err) res.send(500, err.message);
+		console.log("Canciones :"+canciones);
+
+		//var retorno = "{estado:'00'}";
+  	res.status(200).jsonp(agregarRespuesta("00",canciones));
+		//res.status(200).jsonp(canciones);
+});
 };

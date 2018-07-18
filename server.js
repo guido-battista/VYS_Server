@@ -86,4 +86,6 @@ app.get('/quitarVotar',CancionCtrl.quitarVotar);
 
 app.get('/quitarVotarTodo',CancionCtrl.quitarVotarTodo);
 
+app.get('/prueba',CancionCtrl.prueba);
+
 //app.get('/sonandoAhora',CancionCtrl.obtenerSonandoAhora);
