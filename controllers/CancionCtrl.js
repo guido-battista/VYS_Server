@@ -62,7 +62,7 @@ exports.addCancion = function(req, res) {
 exports.obtenerCanciones = (req, res) => {
 	sesion = req.session;
 	evento = sesion.idEvento;
-  Cancion.find({idEvento:req.query.idEvento}).sort({estado:"desc",votos:"desc",titulo:"asc"}).exec(function(err, canciones) {
+  Cancion.find({idEvento:req.query.idEvento, estado:{$in:["Votar","Sonando","Escuchada"]}}).sort({estado:"desc",votos:"desc",titulo:"asc"}).exec(function(err, canciones) {
   	if(err) res.send(500, err.message);
   	res.status(200).jsonp(canciones);
 });
@@ -213,7 +213,7 @@ exports.terminarCancionSonando = (req, res) => {
 exports.obtenerEvento = (req, res) => {
   Evento.findOne({id:req.query.idEvento},function(err, evento) {
   	if(err) res.send(500, err.message);
-  	res.status(200).jsonp(evento);
+  		res.status(200).jsonp(evento);
 });
 };
 
