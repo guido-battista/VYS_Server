@@ -213,6 +213,8 @@ exports.terminarCancionSonando = (req, res) => {
 exports.obtenerEvento = (req, res) => {
   Evento.findOne({id:req.query.idEvento},function(err, evento) {
   	if(err) res.send(500, err.message);
+			if (evento==null)
+				evento = {"_id":"null"};
   		res.status(200).jsonp(evento);
 });
 };
