@@ -92,4 +92,6 @@ app.post('/pausar',CancionCtrl.pausar);
 
 app.post('/reanudar',CancionCtrl.reaundar);
 
+app.post('/enviarNotificacion',CancionCtrl.enviarNotificacion);
+
 //app.get('/sonandoAhora',CancionCtrl.obtenerSonandoAhora);

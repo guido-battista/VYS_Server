@@ -3,6 +3,17 @@ const Evento = require('../Model/Evento.js');
 const Path = require('path');
 const mongoose = require('mongoose');
 
+//Firebase ---------------
+const admin = require("firebase-admin");
+
+var serviceAccount = require("../firebase/serviceAccountKey.json");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: "https://youdj-5c33b.firebaseio.com"
+});
+// ---------------------
+
 var dirVistas = Path.join(__dirname, '../View');
 
 function agregarRespuesta(codigo,json){
@@ -32,7 +43,7 @@ function agregarRespuesta(codigo,json){
 }
 
 // Aca tengo que obtener o definir el evento
-var evento = 1;
+//var evento = 1;
 var session;
 
 //POST - Insert una nueva Cancion
@@ -397,3 +408,30 @@ exports.reaundar = (req, res) => {
 		//res.render(dirVistas + '/index.ejs',{canciones: result})
 	})
 };
+
+exports.enviarNotificacion = (req, res) => {
+
+	// The topic name can be optionally prefixed with "/topics/".
+	evento = sesion.idEvento;
+	var topic = evento + "-votar";
+
+	// See documentation on defining a message payload.
+	var message = {
+  	data: {
+			topic: 'votar',
+    	titulo: 'Probando titulo',
+    	descripcion: 'Prueba de descripcion'
+  	},
+  	topic: topic
+	};
+// Send a message to devices subscribed to the provided topic.
+	admin.messaging().send(message)
+  	.then((response) => {
+    // Response is a message ID string.
+			console.log("Se envió bien la notificación")
+			alert("Se envió la notificacion");
+			res.redirect('..');
+  	})
+  	.catch((error) => {
+  	});
+}

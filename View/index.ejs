@@ -49,17 +49,21 @@
       <form class="navbar-form navbar-right" action="/logout" method="POST">
         <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-log-out"></span> Log out</button>
       </form>
+      <form class="navbar-form navbar-right" action="/enviarNotificacion" method="POST">
+        <button type="submit" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Enviar Notificación"><span class="glyphicon glyphicon-envelope"></span></button>
+      </form>
       <% if (enPausa == "0") { %>
         <form class="navbar-form navbar-right" action="/pausar" method="POST">
           <button type="submit" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Pausar votación"><span class=" glyphicon glyphicon-pause "></span></button>
         </form>
         <p class="navbar-brand navbar-right">Votación en curso</p>
         <% } else { %>
-          <form class="navbar-form navbar-right" action="/reanudar" method="POST">
-            <button type="submit" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Reaundar votación"><span class=" glyphicon glyphicon-play "></span></button>
-          </form>
-          <p class="navbar-brand navbar-right">Votación pausada</p>
+        <form class="navbar-form navbar-right" action="/reanudar" method="POST">
+          <button type="submit" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Reaundar votación"><span class=" glyphicon glyphicon-play "></span></button>
+        </form>
+        <p class="navbar-brand navbar-right">Votación pausada</p>
     <% } %>
+
   </div>
   </nav>
 
