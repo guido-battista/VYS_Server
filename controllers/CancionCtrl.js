@@ -170,6 +170,43 @@ exports.elegirCancion = function(req, res) {
 		if(err) res.send(500, err.message);
 		Cancion.findOneAndUpdate({_id :req.query.id}, {estado:"Sonando"}, function(err, result) {
 			if(err) res.send(500, err.message);
+    
+     //Se genera una notificación con la canción sonando
+     evento = sesion.idEvento;
+     var topic = evento + "-sonando";
+      var message = {
+        data: {
+          topic: 'sonando',
+          titulo: "Sonando ahora",
+          descripcion: result.titulo
+        },
+        topic: topic,
+        //ttl: 1000
+      };
+
+    /*
+      var message = {
+      android: {
+        ttl: 0, // 1 hour in milliseconds
+        priority: 'normal',
+        notification: {
+          title: '¡No dejes de votar!',
+          body: 'Revisá la lista y votá tu próximo tema',
+        }
+      },
+      topic: topic
+    };
+    */
+
+    // Send a message to devices subscribed to the provided topic.
+      admin.messaging().send(message)
+        .then((response) => {
+        // Response is a message ID string.
+          //res.redirect('..');
+        })
+        .catch((error) => {
+          //res.redirect('/Error');
+        });
 			res.redirect('..');
 			//res.render(dirVistas + '/index.ejs',{canciones: result})
 		})
