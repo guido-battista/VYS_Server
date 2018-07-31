@@ -428,8 +428,6 @@ exports.enviarNotificacion = (req, res) => {
 	admin.messaging().send(message)
   	.then((response) => {
     // Response is a message ID string.
-			console.log("Se envió bien la notificación")
-			alert("Se envió la notificacion");
 			res.redirect('..');
   	})
   	.catch((error) => {
