@@ -417,18 +417,18 @@ exports.enviarNotificacion = (req, res) => {
 
 	// See documentation on defining a message payload.
 
-	/*
+
 	var message = {
   	data: {
 			topic: 'votar',
-    	titulo: 'Probando titulo',
-    	descripcion: 'Prueba de descripcion'
+    	titulo: '¡No dejes de votar!',
+    	descripcion: 'Revisá la lista y votá tu próximo tema'
   	},
   	topic: topic,
-		ttl: 0
+		//ttl: 1000
 	};
-	*/
 
+/*
 	var message = {
   android: {
     ttl: 0, // 1 hour in milliseconds
@@ -440,6 +440,7 @@ exports.enviarNotificacion = (req, res) => {
   },
   topic: topic
 };
+*/
 
 // Send a message to devices subscribed to the provided topic.
 	admin.messaging().send(message)
