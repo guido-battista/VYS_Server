@@ -416,14 +416,31 @@ exports.enviarNotificacion = (req, res) => {
 	var topic = evento + "-votar";
 
 	// See documentation on defining a message payload.
+
+	/*
 	var message = {
   	data: {
 			topic: 'votar',
     	titulo: 'Probando titulo',
     	descripcion: 'Prueba de descripcion'
   	},
-  	topic: topic
+  	topic: topic,
+		ttl: 0
 	};
+	*/
+
+	var message = {
+  android: {
+    ttl: 0, // 1 hour in milliseconds
+    priority: 'normal',
+    notification: {
+      title: '¡No dejes de votar!',
+      body: 'Revisá la lista y votá tu próximo tema',
+    }
+  },
+  topic: topic
+};
+
 // Send a message to devices subscribed to the provided topic.
 	admin.messaging().send(message)
   	.then((response) => {
@@ -431,5 +448,6 @@ exports.enviarNotificacion = (req, res) => {
 			res.redirect('..');
   	})
   	.catch((error) => {
+			res.redirect('/Error');
   	});
 }
