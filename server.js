@@ -94,4 +94,6 @@ app.post('/reanudar',CancionCtrl.reaundar);
 
 app.post('/enviarNotificacion',CancionCtrl.enviarNotificacion);
 
+app.get('/mostrarError',CancionCtrl.mostrarError);
+
 //app.get('/sonandoAhora',CancionCtrl.obtenerSonandoAhora);

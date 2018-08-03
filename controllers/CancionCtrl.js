@@ -16,6 +16,10 @@ admin.initializeApp({
 
 var dirVistas = Path.join(__dirname, '../View');
 
+var errores = {"0": "El evento está pausado, debe reanudarlo para continuar."}
+
+var enPausa = 0;
+
 function agregarRespuesta(codigo,json){
 
 		var a;
@@ -81,7 +85,7 @@ exports.obtenerCanciones = (req, res) => {
 
 exports.mostrarHome = (req, res) => {
 	sesion = req.session;
-	if(sesion.idEvento) {
+  if(sesion.idEvento) {
 		evento = sesion.idEvento;
 		Cancion.find({idEvento:evento}).sort({estado:"desc",votos:"desc",titulo:"asc"}).exec(function(err, result) {
   		if(err) res.send(500, err.message);
@@ -90,12 +94,12 @@ exports.mostrarHome = (req, res) => {
 					var aVotar = result.filter(function(a){return a.estado=="Votar" || a.estado=="Pendiente"});
 					var yaEscuchadas = result.filter((a)=>a.estado=="Escuchada");
 					var sonando = result.filter((a)=>a.estado=="Sonando");
-					var enPausa = evento.enPausa;
+					enPausa = evento.enPausa;
 					//console.log("En pausa:" + enPausa);
 					res.render(dirVistas + '/index.ejs',{aVotar : aVotar, yaEscuchadas : yaEscuchadas, sonando:sonando, enPausa:enPausa});
 				})
 		})
-	}
+  }
 	else
 		{
 		//res.render(dirVistas + '/login.ejs',{error : "false", mensaje :"Pass incorrecto"});
@@ -166,51 +170,59 @@ exports.restarVoto = (req, res) => {
 exports.elegirCancion = function(req, res) {
 	sesion = req.session;
 	evento = sesion.idEvento;
-	Cancion.findOneAndUpdate({idEvento:evento, estado:"Sonando"} , {estado:"Escuchada"}, function(err, result) {
-		if(err) res.send(500, err.message);
-		Cancion.findOneAndUpdate({_id :req.query.id}, {estado:"Sonando"}, function(err, result) {
-			if(err) res.send(500, err.message);
-    
+  if (enPausa == 0)
+  {
+	   Cancion.findOneAndUpdate({idEvento:evento, estado:"Sonando"} , {estado:"Escuchada"}, function(err, result) {
+		     if(err) res.send(500, err.message);
+		       Cancion.findOneAndUpdate({_id :req.query.id}, {estado:"Sonando"}, function(err, result) {
+			          if(err) res.send(500, err.message);
+
      //Se genera una notificación con la canción sonando
-     evento = sesion.idEvento;
-     var topic = evento + "-sonando";
-      var message = {
-        data: {
-          topic: 'sonando',
-          titulo: "Sonando ahora",
-          descripcion: result.titulo
-        },
-        topic: topic,
-        //ttl: 1000
-      };
+           evento = sesion.idEvento;
+           var topic = evento + "-sonando";
+            var message = {
+              data: {
+                topic: 'sonando',
+                titulo: "Sonando ahora",
+                descripcion: result.titulo
+              },
+              topic: topic,
+              //ttl: 1000
+            };
 
-    /*
-      var message = {
-      android: {
-        ttl: 0, // 1 hour in milliseconds
-        priority: 'normal',
-        notification: {
-          title: '¡No dejes de votar!',
-          body: 'Revisá la lista y votá tu próximo tema',
-        }
-      },
-      topic: topic
-    };
-    */
+          /*
+            var message = {
+            android: {
+              ttl: 0, // 1 hour in milliseconds
+              priority: 'normal',
+              notification: {
+                title: '¡No dejes de votar!',
+                body: 'Revisá la lista y votá tu próximo tema',
+              }
+            },
+            topic: topic
+          };
+          */
 
-    // Send a message to devices subscribed to the provided topic.
-      admin.messaging().send(message)
-        .then((response) => {
-        // Response is a message ID string.
-          //res.redirect('..');
-        })
-        .catch((error) => {
-          //res.redirect('/Error');
-        });
-			res.redirect('..');
-			//res.render(dirVistas + '/index.ejs',{canciones: result})
-		})
-	})
+          // Send a message to devices subscribed to the provided topic.
+            admin.messaging().send(message)
+              .then((response) => {
+              // Response is a message ID string.
+                //res.redirect('..');
+              })
+              .catch((error) => {
+                //res.redirect('/Error');
+              });
+      			res.redirect('..');
+      			//res.render(dirVistas + '/index.ejs',{canciones: result})
+      		})
+      	})
+      }
+      else
+      {
+        //res.render(dirVistas + '/error.ejs',{descripcionError : "Esto es un error"});
+        res.redirect('/mostrarError?numError=0');
+      }
 };
 
 exports.cancionSonando = (req, res) => {
@@ -431,6 +443,7 @@ exports.pausar = (req, res) => {
 	evento = sesion.idEvento;
 	Evento.findOneAndUpdate({id:evento}, {enPausa:"1"}, function(err, result) {
 		if(err) res.send(500, err.message);
+    enPausa = 1;
 		res.redirect('..');
 		//res.render(dirVistas + '/index.ejs',{canciones: result})
 	})
@@ -441,6 +454,7 @@ exports.reaundar = (req, res) => {
 	evento = sesion.idEvento;
 	Evento.findOneAndUpdate({id:evento}, {enPausa:"0"}, function(err, result) {
 		if(err) res.send(500, err.message);
+    enPausa = 0;
 		res.redirect('..');
 		//res.render(dirVistas + '/index.ejs',{canciones: result})
 	})
@@ -449,6 +463,12 @@ exports.reaundar = (req, res) => {
 exports.enviarNotificacion = (req, res) => {
 
 	// The topic name can be optionally prefixed with "/topics/".
+
+  if (enPausa==1)
+  {
+    res.redirect('/mostrarError?numError=0');
+    return;
+  }
 	evento = sesion.idEvento;
 	var topic = evento + "-votar";
 
@@ -489,3 +509,8 @@ exports.enviarNotificacion = (req, res) => {
 			res.redirect('/Error');
   	});
 }
+
+exports.mostrarError = (req, res) => {
+    //console.log("<"+errores[req.query.numError]);
+    res.render(dirVistas + '/error.ejs',{descripcionError : errores[req.query.numError]});
+};
