@@ -16,7 +16,8 @@ admin.initializeApp({
 
 var dirVistas = Path.join(__dirname, '../View');
 
-var errores = {"0": "El evento está pausado, debe reanudarlo para continuar."}
+var errores = {"0": "El evento está pausado, debe reanudarlo para continuar.",
+               "1": "No se pudo generar la notificación."}
 
 var enPausa = 0;
 
@@ -142,7 +143,7 @@ exports.sumarVoto = (req, res) => {
 				else
 				{
 					resultado['codigoRetorno'] = '01';
-					resultado['descripcionRetorno'] = 'El tema ya no esta disponible para votar';
+					resultado['descripcionRetorno'] = 'El tema ya no está disponible para votar';
 				}
 				//res.status(200).jsonp(result);
 				res.status(200).jsonp(resultado);
@@ -506,7 +507,7 @@ exports.enviarNotificacion = (req, res) => {
 			res.redirect('..');
   	})
   	.catch((error) => {
-			res.redirect('/Error');
+			res.redirect('/mostrarError?numError=1');
   	});
 }
 
