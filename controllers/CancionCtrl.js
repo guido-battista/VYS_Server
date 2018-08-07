@@ -10,7 +10,7 @@ var serviceAccount = require("../firebase/serviceAccountKey.json");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://youdj-5c33b.firebaseio.com"
+  databaseURL: "https://youdj-96cfe.firebaseio.com"
 });
 // ---------------------
 
