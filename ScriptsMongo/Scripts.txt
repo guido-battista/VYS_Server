@@ -1,0 +1,10 @@
+//Conectar a la base
+mongo mongodb://vys_client:vys_client@ds255889.mlab.com:55889/vys_db
+
+//Generar un Evento
+db.eventos.insert({'_id':{"$oid": '1'},'id':'1','codigo':'1234','estado':'A','pass':'abcd','intervalo':10,'enPausa':'0'});
+
+//Baja de eventos
+db.eventos.update({'id':'3'},{ $set:{'estado':'H'}});
+db.canciones.update({'idEvento':'3','estado':'Sonando'},{$set:{'estado':'Escuchada'}});
+db.canciones.remove({'idEvento':'3','estado':{$in:['Pendiente','Votar']}});

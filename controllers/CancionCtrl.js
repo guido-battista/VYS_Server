@@ -32,13 +32,9 @@ function agregarRespuesta(codigo,json){
 				a = "{estado:"+codigo+", respuesta"+json+"}";
 		}
 
-		console.log("Antes del JSON");
 		var b = JSON.parse('{"agregado": "00"}');
 
-		console.log("Antes del Object");
 		var c = Object.assign(json,b);
-
-		console.log(c);
 
 		return c;
 
@@ -131,7 +127,13 @@ exports.sumarVoto = (req, res) => {
 	Evento.findOne({id:req.body.idEvento},function(err, evento)
 	{
   	if(err) res.send(500, err.message);
-		if (evento.enPausa == '0')
+    if (evento.estado == 'H')
+    {
+      resultado['codigoRetorno'] = '03';
+      resultado['descripcionRetorno'] = 'El evento ha finalizado';
+      res.status(200).jsonp(resultado);
+    }
+		else if (evento.enPausa == '0')
 		{
 				Cancion.findOneAndUpdate({_id :req.body._id,estado:"Votar"}, {$inc : {'votos' : 1}}, function(err, result) {
 				if(err) res.send(500, err.message);
@@ -231,7 +233,13 @@ exports.cancionSonando = (req, res) => {
 	Evento.findOne({id:req.query.idEvento},function(err, evento)
 	{
 		if(err) res.send(500, err.message);
-		if (evento.enPausa == "1")
+    if (evento.estado == 'H')
+    {
+      resultado['codigoRetorno'] = '03';
+      resultado['descripcionRetorno'] = 'El evento ha finalizado';
+      res.status(200).jsonp(resultado);
+    }
+		else if (evento.enPausa == "1")
 		{
 			resultado["codigoRetorno"] = '01';
 			resultado["descripcionRetorno"] = "El DJ pausó la votación";
@@ -315,6 +323,11 @@ exports.intentLogin = (req, res) => {
 				mensaje = "Contraseña incorrecta";
 				error = "true";
 			}
+      else if (evento.estado=='H')
+      {
+        mensaje = "El evento ya no se encuentra activo";
+        error = "true";
+      }
 			if (error == "true")
 			{
 				res.render(dirVistas + '/login.ejs',{error : "true", mensaje :mensaje});
