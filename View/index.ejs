@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>YouDJ</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <style>
@@ -28,6 +29,26 @@
   <script>
   $(document).ready(function(){
     $('[data-toggle="tooltip"]').tooltip();
+    //Declaración de la variable enPausa
+    <% if (enPausa == "0") { %>
+        var enPausa=false;
+    <%} else { %>
+        var enPausa=true;
+    <% } %>
+    $( "#enviarNotificacion" ).submit(function( event ) {
+      if (enPausa==true)
+      {
+        alert("No puede enviar notificaciones cuando la votación está pausada");
+        event.preventDefault();
+      }
+    });
+    $( ".formVotar" ).submit(function( event ) {
+      if (enPausa==true)
+      {
+        alert("No puede elegir una canción cuando la votación está pausada");
+        event.preventDefault();
+      }
+    });
   });
 </script>
   </script>
@@ -49,7 +70,7 @@
       <form class="navbar-form navbar-right" action="/logout" method="POST">
         <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-log-out"></span> Log out</button>
       </form>
-      <form class="navbar-form navbar-right" action="/enviarNotificacion" method="POST">
+      <form class="navbar-form navbar-right" action="/enviarNotificacion" method="POST" id="enviarNotificacion">
         <button type="submit" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Enviar Notificación"><span class="glyphicon glyphicon-envelope"></span></button>
       </form>
       <% if (enPausa == "0") { %>
@@ -134,7 +155,7 @@
               <td class="text-center"><%= aVotar[i].votos %></td>
               <td class="text-center">
                 <% if (aVotar[i].estado == "Votar") { %>
-                <form action="/elegir" method="GET">
+                <form action="/elegir" method="GET" class="formVotar">
                   <input style="display: none;" type="text" name="id" value=<%= aVotar[i]._id %>>
                   <button type="submit" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Elegir"><span class="glyphicon glyphicon-play"></span></button>
                 </form>
