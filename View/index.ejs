@@ -49,6 +49,18 @@
         event.preventDefault();
       }
     });
+    $("#buscarVotar").on("keyup", function() {
+      var value = $(this).val().toLowerCase();
+      $("#tablaVotar tr").filter(function() {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+      });
+    });
+    $("#buscarEscuchadas").on("keyup", function() {
+      var value = $(this).val().toLowerCase();
+      $("#tablaEscuchadas tr").filter(function() {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+      });
+    });
   });
 </script>
   </script>
@@ -119,6 +131,9 @@
 
   <div class="container">
       <!--h2><strong>Canciones disponibles para votación</strong></h2-->
+      <p class="col-sm-6">
+        <input id="buscarVotar" type="text" placeholder="Buscar..." class="form-control">
+      </p>
       <table class="table table-bordered">
         <thead>
           <tr>
@@ -148,7 +163,7 @@
             <% }%>
           </tr>
         </thead>
-        <tbody>
+        <tbody id="tablaVotar">
           <% for(var i=0; i<aVotar.length; i++) {%>
             <tr>
               <td class="text-center"><%= aVotar[i].titulo %></td>
@@ -192,6 +207,9 @@
 
   <div class="container">
       <!--h2><strong>Canciones ya escuchadas</strong></h2-->
+      <p class="col-sm-6">
+        <input id="buscarEscuchadas" type="text" placeholder="Buscar..." class="form-control">
+      </p>
         <table class="table table-bordered">
           <thead>
             <tr>
@@ -207,18 +225,20 @@
               </th>
             </tr>
           </thead>
-        <% for(var i=0; i<yaEscuchadas.length; i++) {%>
-        <tr>
-          <td class="text-center"><%= yaEscuchadas[i].titulo %></td>
-          <td class="text-center"><%= yaEscuchadas[i].votos %></td>
-          <td class="text-center">
-            <form action="/quitar" method="GET">
-              <input style="display: none;" type="text" name="id" value=<%= yaEscuchadas[i]._id %>>
-              <button type="submit" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Borrar"><span class="glyphicon glyphicon-remove"></span></button>
-            </form>
-          </td>
-        </tr>
-        <% } %>
+        <tbody id="tablaEscuchadas">
+          <% for(var i=0; i<yaEscuchadas.length; i++) {%>
+            <tr>
+              <td class="text-center"><%= yaEscuchadas[i].titulo %></td>
+              <td class="text-center"><%= yaEscuchadas[i].votos %></td>
+              <td class="text-center">
+                <form action="/quitar" method="GET">
+                  <input style="display: none;" type="text" name="id" value=<%= yaEscuchadas[i]._id %>>
+                  <button type="submit" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Borrar"><span class="glyphicon glyphicon-remove"></span></button>
+                </form>
+              </td>
+            </tr>
+            <% } %>
+        </tbody>
       </table>
   </div>
 
