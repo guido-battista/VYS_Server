@@ -528,3 +528,34 @@ exports.mostrarError = (req, res) => {
     //console.log("<"+errores[req.query.numError]);
     res.render(dirVistas + '/error.ejs',{descripcionError : errores[req.query.numError]});
 };
+
+
+exports.reconocerEvento = (req, res) => {
+	sesion = req.session;
+	evento = sesion.idEvento;
+  var latitud = parseFloat(req.query.latitud);
+  var longitud = parseFloat(req.query.longitud);
+  var maxLatitud = latitud + 0.005;
+  var minLatitud = latitud - 0.005;
+  var maxLongitud = longitud + 0.005;
+  var minLongitud = longitud - 0.005;
+  Evento.find({latitud:{$gt:minLatitud,$lt:maxLatitud},longitud:{$gt:minLongitud,$lt:maxLongitud}}).exec(function(err, eventos) {
+    if(err) res.send(500, err.message);
+    res.status(200).jsonp(eventos);
+  });
+};
+
+exports.eventosCercanos = (req, res) => {
+	sesion = req.session;
+	evento = sesion.idEvento;
+  var latitud = parseFloat(req.query.latitud);
+  var longitud = parseFloat(req.query.longitud);
+  var maxLatitud = latitud + 0.05;
+  var minLatitud = latitud - 0.05;
+  var maxLongitud = longitud + 0.05;
+  var minLongitud = longitud - 0.05;
+  Evento.find({latitud:{$gt:minLatitud,$lt:maxLatitud},longitud:{$gt:minLongitud,$lt:maxLongitud}}).exec(function(err, eventos) {
+    if(err) res.send(500, err.message);
+    res.status(200).jsonp(eventos);
+  });
+};

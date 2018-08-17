@@ -9,7 +9,12 @@ var eventoSchema = new Schema({
       estado:     { type: String },
       pass:       { type: String },
       intervalo:  { type: Number },
-      enPausa:    { type: String}
+      enPausa:    { type: String },
+      latitud:    { type: Number },
+      longitud:   { type: Number },
+      nombre:     { type: String },
+      dj:         { type: String },
+      lugar:      { type: String }
       //0:Votando, 1:En pausa
 });
 

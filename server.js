@@ -110,4 +110,8 @@ app.post('/enviarNotificacion',CancionCtrl.enviarNotificacion);
 
 app.get('/mostrarError',CancionCtrl.mostrarError);
 
+app.get('/reconocerEvento',CancionCtrl.reconocerEvento);
+
+app.get('/eventosCercanos',CancionCtrl.eventosCercanos);
+
 //app.get('/sonandoAhora',CancionCtrl.obtenerSonandoAhora);
