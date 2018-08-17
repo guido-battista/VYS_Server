@@ -22,10 +22,24 @@ var db;
 
 var port = process.env.PORT || 3000;
 
+var conString;
+
+if (port == 3000)
+{
+  //Dessarrollo
+  var conString = 'mongodb://you_dj_desa:you_dj_desa_01@ds123822.mlab.com:23822/you_dj_desa'
+}
+else
+{
+  //Produccion
+  var conString = 'mongodb://vys_client:vys_client@ds255889.mlab.com:55889/vys_db'
+}
+
 app.use(express.static(__dirname + '/Images'));
 
 
-mongoose.connect('mongodb://vys_client:vys_client@ds255889.mlab.com:55889/vys_db', function(err, res) {
+//mongoose.connect('mongodb://vys_client:vys_client@ds255889.mlab.com:55889/vys_db', function(err, res) {
+mongoose.connect(conString, function(err, res) {
   if(err) {
     console.log('ERROR: connecting to Database. ' + err);
   }
